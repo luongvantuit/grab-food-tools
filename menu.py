@@ -8,7 +8,6 @@ colors = [
     "#facc15",
     "#a3e635",
     "#4ade80",
-    "#022c22",
     "#0891b2",
     "#2563eb",
     "#7c3aed",
@@ -52,24 +51,32 @@ def export_categories(categories: any):
         fm_category_name = workbook.add_format(
             {
                 "bold": 1,
-                "border": 1,
                 "align": "center",
                 "valign": "vcenter",
                 "fg_color": s_color,
                 "font_name": "Times New Roman",
+                "text_wrap": 1,
             }
         )
 
         fm_item_name = workbook.add_format(
             {
-                "font_name": "Time New Roman",
                 "bold": 1,
+                "align": "center",
+                "valign": "vcenter",
+                "font_name": "Time New Roman",
+                "text_wrap": 1,
+                "font_size": 10,
             }
         )
         sum_i = sum_items(menu=menu, idx=i)
 
         x = clc[sum_i]
         y = clc[sum_i + len(category["items"]) - 1]
+
+        worksheet.set_column(sum_i, sum_i + len(category["items"]) - 1, 25)
+        # worksheet.set_row(0, 20)
+        worksheet.set_row(1, 45)
 
         if x == y:
             worksheet.write(f"{x}1", category["name"], fm_category_name)
@@ -87,14 +94,16 @@ if __name__ == "__main__":
     menu: any = fetch_menu(merchant_id=merchant_id.strip())
     categories = []
     for _, category in enumerate(menu["categories"]):
-        option: str =input(f"You want export category {category["name"]} to sheet (yes/no): ")
+        option: str = input(
+            f"You want export category {category["name"]} to sheet (yes/no) default no: "
+        )
         option = option.strip().lower()
-        if option == "yes":
+        if option == "yes" or option == "y":
             if len(category["items"]) > 0:
                 categories.append(category)
-        elif option == "no":
+        elif option == "no" or option == "n" or option == "":
             continue
         else:
             raise Exception(f"Invalid option {option}.Please enter (yes/no)")
-        
+
     export_categories(categories=categories)
