@@ -95,7 +95,7 @@ if __name__ == "__main__":
     categories = []
     for _, category in enumerate(menu["categories"]):
         option: str = input(
-            f"You want export category {category["name"]} to sheet (yes/no) default no: "
+            f"You want export category {category['name']} to sheet (yes/no) default no: "
         )
         option = option.strip().lower()
         if option == "yes" or option == "y":
